@@ -62,7 +62,7 @@ def collate_fn(batch):
 
     return padded_inputs, torch.tensor(labels, dtype=torch.float32), input_lengths
 
-def load_dataset(data_folder = 'dataset/IMDB Dataset.csv', batch_size = 32):
+def load_dataset(data_folder = 'dataset/IMDB Dataset.csv', batch_size = 32, pretrained = True):
     df = pd.read_csv(data_folder)
     # Create a mapping dictionary
     label_mapping = {'positive': 1, 'negative': 0}
@@ -115,27 +115,28 @@ def load_dataset(data_folder = 'dataset/IMDB Dataset.csv', batch_size = 32):
     # Example usage: Print the vocabulary
     print(vocab[:50])
 
-    # Count the number of tokens per data point
-    token_counts = []
-    for data_point in word_tokens:
-        token_count = len(data_point)
-        token_counts.append(token_count)
+    if(pretrained == False):
+        # Count the number of tokens per data point
+        token_counts = []
+        for data_point in word_tokens:
+            token_count = len(data_point)
+            token_counts.append(token_count)
 
 
-    # # Load GloVe embeddings
-    # # Load a subset of GloVe embeddings
-    glove = GloVe(name='6B', dim=300)
+        # # Load GloVe embeddings
+        # # Load a subset of GloVe embeddings
+        glove = GloVe(name='6B', dim=300)
 
-    # # Create a matrix to store GloVe embeddings
-    embedding_matrix = np.zeros((len(vocab), 300))
+        # # Create a matrix to store GloVe embeddings
+        embedding_matrix = np.zeros((len(vocab), 300))
 
 
-    # # Fill the embedding matrix
-    for i, token in enumerate(vocab):
-        embedding_matrix[i] = glove[token]
+        # # Fill the embedding matrix
+        for i, token in enumerate(vocab):
+            embedding_matrix[i] = glove[token]
 
-    print("---------Saved pretrained embedding---------")
-    np.save('embeddings.npy', embedding_matrix)
+        print("---------Saved pretrained embedding---------")
+        np.save('embeddings.npy', embedding_matrix)
 
 
     train_dataset = IMDBDataset(train_df, tokenizer, vocab)

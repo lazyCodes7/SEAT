@@ -4,7 +4,8 @@ import numpy as np
 import torch.nn.functional as F
 from torch.distributions import normal
 from .attention import TanhAttention
-class AttentionLSTM(nn.Module):
+import lightning.pytorch as pl
+class AttentionLSTM(pl.LightningModule):
     def __init__(
         self,
         vocab_size,

@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 from modules.loader import load_dataset
 from modules.lstm import AttentionLSTM
 import torch.nn as nn
@@ -68,7 +70,7 @@ if __name__ == "__main__":
     loss_fn = nn.BCELoss()
     step_size = 20
     eps = 0.1
-    train_loader, test_loader = load_dataset('/content/drive/MyDrive/SEAT/IMDB Dataset.csv')
+    train_loader, test_loader = load_dataset('IMDB Dataset.csv')
 
     embed_size, num_hiddens, num_layers, device = 300, 128, 1, torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -80,7 +82,7 @@ if __name__ == "__main__":
             dropout = 0.4,
     )
     net.apply(init_weights)
-    net.load_state_dict(torch.load('/content/drive/MyDrive/SEAT/models/imdb_bilstm_tanh_attention_glove_300d.pt', map_location = device))
+    net.load_state_dict(torch.load('imdb_bilstm_tanh_attention_glove_300d.pt', map_location = device))
     net = net.to(device)
     seat_w = TanhAttention(hidden_size = num_hiddens*2).to(device)
     optimizer = optim.Adam(seat_w.parameters(), lr = 0.01)
