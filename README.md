@@ -7,6 +7,7 @@ Well it goes as follows. Since we want to have an attention that is stable towar
 
 ## Let's get into the algorithm.
 <img src='/assets/algo.png'>
+
 It is a whole bunch of maths so let's dumb it down!
 - Wo_bar is basically our SEAT and to make it stronger we find a perturbation delta by using the PGD attack
 - Then we add the delta to Wo_bar and see how it performs compared to the vanilla attention and penalize it accordingly
