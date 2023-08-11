@@ -16,6 +16,15 @@ class AttentionLSTM(pl.LightningModule):
         lstm_layer = 2
 
     ):
+        """
+        Inputs: 
+            vocab_size -> Length of the total unique words
+            emb_dim -> Length of the compressed dimension/embedding
+            hidden_size -> Output size of the hidden states of LSTM
+            dropout -> probablity measure for dropping nodes to prevent overfitting
+            lstm_layer -> for lstm - 1 and for bi-lstm - 2
+
+        """
         super(AttentionLSTM, self).__init__()
         self.embedding = nn.Embedding(vocab_size, emb_dim)
         self.dropout = nn.Dropout(p=dropout)
@@ -29,7 +38,11 @@ class AttentionLSTM(pl.LightningModule):
         self.sigmoid = nn.Sigmoid()
         self.m = normal.Normal(0, 1e-3)
 
+
     def forward(self, x, x_len):
+        """
+        Forward propagation
+        """
         x = self.embedding(x)
         x = self.dropout(x)
         x = nn.utils.rnn.pack_padded_sequence(x, x_len, batch_first=True, enforce_sorted=False)
@@ -44,6 +57,9 @@ class AttentionLSTM(pl.LightningModule):
         return y
 
     def atten_forward(self, x, x_len):
+        """
+        Attention only output
+        """
         x = self.embedding(x)
         x = self.dropout(x)
         x = nn.utils.rnn.pack_padded_sequence(x, x_len, batch_first=True, enforce_sorted=False)
@@ -56,6 +72,9 @@ class AttentionLSTM(pl.LightningModule):
         return x, y
 
     def perturb(self, x, x_len, device = 'cpu'):
+      """
+      For evaluating perturbation on embedding
+      """
       x = self.embedding(x)
       idx = torch.randint(low = 0, high = x.shape[1], size = (x.shape[0],))
       s = self.m.sample((x.shape[0], 1, x.shape[2]))

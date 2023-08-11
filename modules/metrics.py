@@ -8,6 +8,16 @@ class JSD(nn.Module):
         self.kl = nn.KLDivLoss(reduction='batchmean', log_target=True)
        
     def forward(self, p: torch.tensor, q: torch.tensor):
+        """
+        Module for calculating the Jensen-Shannon Divergence/ Similarity of two probablity distributions p and q
+
+        Inputs:
+            p (torch.tensor) : first probablity distribution
+            q (torch.tensor) : second probablity distribution
+        
+        Output:
+            JSD Score - Symmetric version of the KL-Divergence Score
+        """
         p, q = p.view(-1, p.size(-1)).log_softmax(-1), q.view(-1, q.size(-1)).log_softmax(-1)
         m = (0.5 * (p + q))
         return 0.5 * (self.kl(m, p) + self.kl(m, q))
@@ -17,11 +27,11 @@ def total_variation_distance_from_logits(logits_p, logits_q):
     """
     Calculate the Total Variation Distance between two probability distributions.
 
-    Args:
+    Inputs:
         logits_p (torch.Tensor): The logits (raw network outputs) for the first distribution.
         logits_q (torch.Tensor): The logits (raw network outputs) for the second distribution.
 
-    Returns:
+    Output:
         torch.Tensor: The Total Variation Distance between the probability distributions.
     """
     # Convert logits to probabilities using the softmax function

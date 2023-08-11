@@ -12,6 +12,16 @@ from tqdm.auto import tqdm
 from modules.metrics import total_variation_distance_from_logits, JSD
 import lightning as pl
 class SEAT(pl.LightningModule):
+    '''
+    init(num_hiddens, net, device)
+
+    Inputs:
+        num_hiddens -> (int) hidden_size of the LSTM
+        net -> (nn.Module) Pretrained LSTM network
+        device -> (torch.device) Preferred device for training
+
+    Function: Initializes the SEAT
+    '''
     def __init__(self, num_hiddens, net, device) -> None:
         super().__init__()
         self.attention = TanhAttention(hidden_size=num_hiddens*2)
@@ -35,7 +45,11 @@ class SEAT(pl.LightningModule):
         self.net.attention = self.init_attention
 
     '''
-    Objective function to train the proposed SEAT Attention
+    Function to train the proposed SEAT Attention
+
+    Inputs -> Batch (text, label, length(text sequence))
+
+    Outputs -> Loss for parameter update
     '''
     def training_step(self, batch):
         text, label, seq_length = batch
@@ -47,6 +61,13 @@ class SEAT(pl.LightningModule):
         loss = st_loss + self.lambda1*sim_loss + self.lambda2*tk_loss
         return loss
     
+    '''
+    Function to evaluate the SEAT vs the Vanilla/Base attention
+
+    Inputs -> Batch (text, label, length(text sequence))
+
+    Outputs -> JSD and TVD scores comparing the performance of SEAT with Vanilla attention
+    '''
     def validation_step(self, batch):
         with torch.no_grad():
             text, label, seq_length = batch
