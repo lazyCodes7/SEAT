@@ -1,14 +1,13 @@
 # SEAT(Stable and Explainable Attention)
-![Screenshot from 2023-08-11 22-36-17](https://github.com/lazyCodes7/SEAT/assets/53506835/aec80afc-652f-434a-8db3-1b38c756ff50)
+<img src='/assets/example.png'>
 Attention stands out as a pivotal mechanism within the architecture of transformers, playing a foundational role. Nonetheless, like other neural networks, transformers remain susceptible to adversarial attacks. Another issue lies in their inconsistency; minor deviations in random seeds can lead to diverse configurations of the attention module. A potential solution revolves around crafting an attention mechanism that not only retains the essence of traditional attention but also demonstrates resilience against attacks. 
 
 ## So how are we doing this then?
 Well it goes as follows. Since we want to have an attention that is stable towards attacks we craft one by attacking it and making it stronger:p. Similarly for making it similar to the vanilla attention we try to punish our proposed attention when it fails to mimic the original attention. In short, we define an objective function and train our proposed attention to make it the way we want it to be
 
 ## Let's get into the algorithm.
-![image](https://github.com/lazyCodes7/SEAT/assets/53506835/7fea49ea-e3c4-41a4-91e7-6dfac86eb425)
+<img src='/assets/algo.png'>
 It is a whole bunch of maths so let's dumb it down!
-
 - Wo_bar is basically our SEAT and to make it stronger we find a perturbation delta by using the PGD attack
 - Then we add the delta to Wo_bar and see how it performs compared to the vanilla attention and penalize it accordingly
 - At the same time we punish our attention for not mimicing the predictions and also the vanilla attention
