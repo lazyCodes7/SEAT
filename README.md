@@ -39,6 +39,7 @@ So to prove this I tried out two things first compared it with the vanilla atten
 ## For reproducing
 ```
 git clone git@github.com:lazyCodes7/SEAT.git
+pip install -r requirements.txt
 cd seat
 python train.py -d 'cuda'
 //yay
