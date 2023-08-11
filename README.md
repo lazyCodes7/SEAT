@@ -1,4 +1,5 @@
 # SEAT(Stable and Explainable Attention)
+![Screenshot from 2023-08-11 22-36-17](https://github.com/lazyCodes7/SEAT/assets/53506835/aec80afc-652f-434a-8db3-1b38c756ff50)
 Attention stands out as a pivotal mechanism within the architecture of transformers, playing a foundational role. Nonetheless, like other neural networks, transformers remain susceptible to adversarial attacks. Another issue lies in their inconsistency; minor deviations in random seeds can lead to diverse configurations of the attention module. A potential solution revolves around crafting an attention mechanism that not only retains the essence of traditional attention but also demonstrates resilience against attacks. 
 
 ## So how are we doing this then?
@@ -54,3 +55,4 @@ python train.py -d 'cuda'
       primaryClass={cs.CL}
 }
 ```
+
