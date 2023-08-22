@@ -51,7 +51,7 @@ class SEAT(pl.LightningModule):
 
     Outputs -> Loss for parameter update
     '''
-    def training_step(self, batch):
+    def training_step(self, batch, batch_idx):
         text, label, seq_length = batch
         #delta_o = torch.randn(seat_w.shape).to(device)
         delta = pgd_attack(self.net, text, label, seq_length, self.alpha, self.attention, self.loss_fn, self.step_size, self.eps, 32, self.compute)
@@ -59,6 +59,7 @@ class SEAT(pl.LightningModule):
         sim_loss = similarity_loss(self.net, text, seq_length, self.attention, self.loss_fn)
         tk_loss = topk_loss(self.net, text, seq_length, self.attention, k=7)
         loss = st_loss + self.lambda1*sim_loss + self.lambda2*tk_loss
+        self.log("loss", loss.item())
         return loss
     
     '''
@@ -68,7 +69,7 @@ class SEAT(pl.LightningModule):
 
     Outputs -> JSD and TVD scores comparing the performance of SEAT with Vanilla attention
     '''
-    def validation_step(self, batch):
+    def validation_step(self, batch, batch_idx):
         with torch.no_grad():
             text, label, seq_length = batch
             attn_vanilla, output_vanilla = self.net.atten_forward(text, seq_length)
