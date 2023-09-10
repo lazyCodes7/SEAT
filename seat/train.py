@@ -43,7 +43,7 @@ if __name__ == "__main__":
             dropout = 0.4,
     )
     net.apply(init_weights)
-    net.load_state_dict(torch.load('imdb_bilstm_tanh_attention_glove_300d.pt', map_location = args.device))
+    net.load_state_dict(torch.load('imdb_bilstm_tanh_attention_glove_300d.pt', map_location = args.device), strict = False)
     net = net.to(args.device)
     seat = SEAT(args.hiddens, net, args.device)
     trainer = pl.Trainer(max_epochs=args.epoch)
