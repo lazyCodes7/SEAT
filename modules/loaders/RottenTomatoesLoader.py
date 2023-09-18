@@ -44,7 +44,7 @@ class RottenTomatoesLoader(BaseLoader):
                 word_frequency[word] = 1
 
         # Step 2: Define threshold frequency
-        threshold = threshold
+        threshold = 1
 
         # Step 3: Create filtered list
         vocab = [word for word in vocab if word_frequency[word] >= threshold]
