@@ -1,14 +1,8 @@
 import sys
-from typing import Any
 sys.path.append('../')
-from modules.loader import load_dataset
-from modules.lstm import AttentionLSTM
 import torch.nn as nn
 import torch
-from modules.attention import TanhAttention
-import torch.optim as optim
 from modules.loss import pgd_attack, topk_loss, similarity_loss, stability_loss
-from tqdm.auto import tqdm
 from modules.metrics import total_variation_distance_from_logits, JSD
 import lightning as pl
 class SEAT(pl.LightningModule):

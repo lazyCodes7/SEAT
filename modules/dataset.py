@@ -59,3 +59,28 @@ class IMDBDataset(Dataset):
         data_ids = [self.vocab_dict[word] for word in truncated_data if self.vocab_dict.get(word) is not None]
 
         return torch.tensor(data_ids), target
+    
+
+class RottenTomatoes(Dataset):
+    def __init__(self, df, tokenizer, vocab, max_length=500):
+        self.data = df['text']
+        self.targets = df['label']
+        self.max_length = max_length
+        self.tokenizer = tokenizer
+        self.vocab_dict = {token: index for index, token in enumerate(vocab)}
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, index):
+        # Get the data and target for the given index
+        data_point = self.data.iloc[index]
+        data_point = stringprocess(data_point)
+        word_tokens = self.tokenizer(data_point)
+        target = self.targets.iloc[index]
+
+        # Truncate the data point to the specified max length
+        truncated_data = word_tokens[:self.max_length]
+        data_ids = [self.vocab_dict[word] for word in truncated_data if self.vocab_dict.get(word) is not None]
+
+        return torch.tensor(data_ids), target

@@ -1,14 +1,13 @@
 import sys
 from typing import Any
 sys.path.append('../')
-from modules.loader import load_dataset
 from modules.lstm import AttentionLSTM
 import torch.nn as nn
 import torch
 from seat import SEAT
 import argparse
 import lightning as pl
-
+from modules.loaders import RottenTomatoesLoader
 '''
 Function for initializing weights for a particular module
 '''
@@ -32,9 +31,9 @@ if __name__ == "__main__":
     parser.add_argument('-e', '--epoch', type=int, required=False, default=1)
 
     args = parser.parse_args()
+    loader = RottenTomatoesLoader()
 
-    train_loader, test_loader = load_dataset('IMDB Dataset.csv')
-
+    train_loader, test_loader = loader.load_dataset()
     net = AttentionLSTM(
             vocab_size = len(train_loader.dataset.vocab_dict),
             emb_dim = args.embed_size,
@@ -43,7 +42,7 @@ if __name__ == "__main__":
             dropout = 0.4,
     )
     net.apply(init_weights)
-    net.load_state_dict(torch.load('imdb_bilstm_tanh_attention_glove_300d.pt', map_location = args.device), strict = False)
+    net.load_state_dict(torch.load(args.model_path, map_location = args.device), strict = False)
     net = net.to(args.device)
     seat = SEAT(args.hiddens, net, args.device)
     trainer = pl.Trainer(max_epochs=args.epoch)
